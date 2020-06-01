@@ -2064,6 +2064,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2074,7 +2075,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      posts: null
+      posts: [],
+      loading: true
     };
   },
   mounted: function mounted() {
@@ -2082,8 +2084,10 @@ __webpack_require__.r(__webpack_exports__);
 
     axios.get('/api/posts').then(function (res) {
       _this.posts = res.data;
+      _this.loading = false;
     })["catch"](function (err) {
       console.log('Unable to fetch posts');
+      _this.loading = false;
     });
   }
 });
@@ -38064,6 +38068,8 @@ var render = function() {
     [
       _c("NewPost"),
       _vm._v(" "),
+      _vm.loading ? _c("p", [_vm._v("Loading...")]) : _vm._e(),
+      _vm._v(" "),
       _vm._l(_vm.posts.data, function(post) {
         return _c("Post", { key: post.data.post_id, attrs: { post: post } })
       })
@@ -38119,7 +38125,14 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm._m(1),
+      _vm.post.data.attributes.image
+        ? _c("div", { staticClass: "w-full" }, [
+            _c("img", {
+              staticClass: "w-full",
+              attrs: { src: _vm.post.data.attributes.image, alt: "" }
+            })
+          ])
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "div",
@@ -38148,7 +38161,7 @@ var render = function() {
             _c("p", [_vm._v("Jane Smith and 137 others")])
           ]),
           _vm._v(" "),
-          _vm._m(2)
+          _vm._m(1)
         ]
       ),
       _vm._v(" "),
@@ -38198,17 +38211,6 @@ var staticRenderFns = [
     return _c("div", { staticClass: "w-8" }, [
       _c("img", {
         staticClass: "w-8 h-8 object-cover rounded-full",
-        attrs: { src: "/img/978ac1e89199109775da54aae87299dc_600.jpg", alt: "" }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "w-full" }, [
-      _c("img", {
-        staticClass: "w-full",
         attrs: { src: "/img/978ac1e89199109775da54aae87299dc_600.jpg", alt: "" }
       })
     ])

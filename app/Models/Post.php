@@ -20,4 +20,9 @@ class Post extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getImagePathAttribute()
+    {
+        return $this->attributes['image_path'] = '/img/' . $this->image;
+    }
 }
