@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostCollection;
 use App\Http\Resources\PostResource;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class UserPostController extends Controller
 {
