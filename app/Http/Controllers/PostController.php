@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostCollection;
 use App\Http\Resources\PostResource;
+use App\Models\Post;
 
 class PostController extends Controller
 {
+    public function index()
+    {
+        return new PostCollection(request()->user()->posts);
+    }
+
     public function store()
     {
         $data = request()->validate([
