@@ -1,14 +1,23 @@
 <template>
-    <div>
-        <Start />
+    <div class="flex flex-col flex-1 h-screen overflow-y-hidden">
+        <Nav/>
+        <div class="flex overflow-y-hidden flex-1">
+            <Sidebar/>
+
+            <div class="overflow-x-hidden w-3/4">
+                <router-view></router-view>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-    import Start from "../views/Start";
+    import Nav from "./Nav";
+    import Sidebar from "./Sidebar";
+
     export default {
         components: {
-            Start
+            Nav, Sidebar
         }
     }
 </script>
