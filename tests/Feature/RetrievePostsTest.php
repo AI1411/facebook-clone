@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class RetrievePostsTest extends TestCase
@@ -15,10 +14,9 @@ class RetrievePostsTest extends TestCase
     /** @test */
     public function a_user_can_retrieve_posts()
     {
-        $this->withoutExceptionHandling();
-
-        $this->actingAs($user = factory(\App\Models\User::class)->create(), 'api');
-        $posts = factory(\App\Models\Post::class, 2)->create(['user_id' => $user->id]);
+        $this->actingAs($user = factory(User::class)->create(), 'api');
+        $anotherUser = factory(User::class)->create();
+        $posts = factory(Post::class, 2)->create(['user_id' => $anotherUser->id]);
 
         $response = $this->get('/api/posts');
 
@@ -31,7 +29,7 @@ class RetrievePostsTest extends TestCase
                             'post_id' => $posts->last()->id,
                             'attributes' => [
                                 'body' => $posts->last()->body,
-                                'image' => $posts->last()->image,
+                                'image' => url($posts->last()->image),
                                 'posted_at' => $posts->last()->created_at->diffForHumans(),
                             ]
                         ]
@@ -42,7 +40,7 @@ class RetrievePostsTest extends TestCase
                             'post_id' => $posts->first()->id,
                             'attributes' => [
                                 'body' => $posts->first()->body,
-                                'image' => $posts->first()->image,
+                                'image' => url($posts->first()->image),
                                 'posted_at' => $posts->first()->created_at->diffForHumans(),
                             ]
                         ]
@@ -54,20 +52,19 @@ class RetrievePostsTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function a_user_can_only_retrieve_their_posts()
     {
         $this->actingAs($user = factory(User::class)->create(), 'api');
         $posts = factory(Post::class)->create();
 
         $response = $this->get('/api/posts');
+
         $response->assertStatus(200)
             ->assertExactJson([
                 'data' => [],
                 'links' => [
-                    'self' => url('/posts')
+                    'self' => url('/posts'),
                 ]
             ]);
     }

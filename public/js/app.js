@@ -37910,7 +37910,7 @@ var render = function() {
             "router-link",
             {
               staticClass:
-                "px-6 border-b-2 border-blue-500 h-full flex items-center ",
+                "px-6 border-b-2 border-blue-500 h-full flex items-center",
               attrs: { to: "/users/" + _vm.authUser.data.user_id }
             },
             [
