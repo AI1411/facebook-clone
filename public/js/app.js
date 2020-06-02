@@ -2072,8 +2072,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "NewPost"
+  computed: {
+    postMessage: {
+      get: function get() {
+        return this.$store.getters.postMessage;
+      },
+      set: function set(postMessage) {
+        this.$store.commit('updateMessage', postMessage);
+      }
+    }
+  }
 });
 
 /***/ }),
@@ -38092,7 +38107,52 @@ var render = function() {
     _c("div", { staticClass: "flex justify-between items-center" }, [
       _vm._m(0),
       _vm._v(" "),
-      _vm._m(1),
+      _c(
+        "div",
+        { staticClass: "flex-1 flex mx-4" },
+        [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.postMessage,
+                expression: "postMessage"
+              }
+            ],
+            staticClass:
+              "w-full pl-4 h-8 bg-gray-200 rounded-full focus:outline-none focus:shadow-outline text-sm",
+            attrs: { type: "text", name: "body" },
+            domProps: { value: _vm.postMessage },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.postMessage = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("transition", { attrs: { name: "fade" } }, [
+            _vm.postMessage
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "bg-gray-200 ml-2 px-3 py-1 rounded-full",
+                    on: {
+                      click: function($event) {
+                        return _vm.$store.dispatch("postMessage")
+                      }
+                    }
+                  },
+                  [_vm._v("Post")]
+                )
+              : _vm._e()
+          ])
+        ],
+        1
+      ),
       _vm._v(" "),
       _c("div", [
         _c(
@@ -38140,22 +38200,6 @@ var staticRenderFns = [
             alt: ""
           }
         })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "flex-1 flex mx-4" }, [
-      _c("input", {
-        staticClass:
-          "w-full pl-4 h-8 bg-gray-200 rounded-full focus:outline-none focus:shadow-outline text-sm",
-        attrs: { type: "text", name: "body" }
-      }),
-      _vm._v(" "),
-      _c("button", { staticClass: "bg-gray-200 ml-2 px-3 py-1 rounded-full" }, [
-        _vm._v("Post")
       ])
     ])
   }
@@ -55170,7 +55214,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
 __webpack_require__.r(__webpack_exports__);
 var state = {
   newsPosts: null,
-  newsPostsStatus: null
+  newsPostsStatus: null,
+  postMessage: ''
 };
 var getters = {
   newsPosts: function newsPosts(state) {
@@ -55180,6 +55225,9 @@ var getters = {
     return {
       newsPostsStatus: state.newsPostsStatus
     };
+  },
+  postMessage: function postMessage(state) {
+    return state.postMessage;
   }
 };
 var actions = {
@@ -55193,6 +55241,17 @@ var actions = {
     })["catch"](function (error) {
       commit('setPostsStatus', 'error');
     });
+  },
+  postMessage: function postMessage(_ref2) {
+    var commit = _ref2.commit,
+        state = _ref2.state;
+    commit('setPostsStatus', 'loading');
+    axios.post('/api/posts', {
+      body: state.postMessage
+    }).then(function (res) {
+      commit('pushPost', res.data);
+      commit('updateMessage', '');
+    })["catch"](function (err) {});
   }
 };
 var mutations = {
@@ -55201,6 +55260,12 @@ var mutations = {
   },
   setPostsStatus: function setPostsStatus(state, status) {
     state.newsPostsStatus = status;
+  },
+  updateMessage: function updateMessage(state, message) {
+    state.postMessage = message;
+  },
+  pushPost: function pushPost(state, post) {
+    state.newsPosts.data.unshift(post);
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({
