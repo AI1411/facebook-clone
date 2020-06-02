@@ -311,4 +311,23 @@ class FriendsTest extends TestCase
         $responseString = json_decode($response->getContent(), true);
         $this->assertArrayHasKey('user_id', $responseString['errors']['meta']);
     }
+
+    /**
+     * @test
+     */
+    public function a_user_can_send_a_friend_request_only_once()
+    {
+        $this->actingAs($user = factory(User::class)->create(), 'api');
+        $anotherUser = factory(User::class)->create();
+
+        $this->post('/api/friend-request', [
+            'friend_id' => $anotherUser->id,
+        ])->assertStatus(200);
+        $this->post('/api/friend-request', [
+            'friend_id' => $anotherUser->id,
+        ])->assertStatus(200);
+
+        $friendRequest = Friend::all();
+        $this->assertCount(1, $friendRequest);
+    }
 }
