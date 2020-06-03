@@ -26,7 +26,7 @@ class UserImageResource extends JsonResource
                 ]
             ],
             'links' => [
-                'self' => url('/users' . $this->user_id)
+                'self' => url('/users/' . $this->user_id)
             ]
         ];
     }
