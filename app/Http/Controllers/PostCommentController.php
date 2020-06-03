@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CommentCollection;
+use App\Http\Resources\CommentResource;
 use App\Models\Post;
-use Illuminate\Http\Request;
 
 class PostCommentController extends Controller
 {
@@ -15,9 +15,9 @@ class PostCommentController extends Controller
         ]);
 
         $post->comments()->create(array_merge($data, [
-            'user_id' => auth()->user()->id
+            'user_id' => auth()->user()->id,
         ]));
 
-        return new CommentCollection($post->comments);
+        return new CommentResource($post);
     }
 }

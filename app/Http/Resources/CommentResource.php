@@ -25,7 +25,7 @@ class CommentResource extends JsonResource
                 ]
             ],
             'links' => [
-                'self' => url('/posts/' . $this->post_id),
+                'self' => url('/posts/'.$this->post_id),
             ]
         ];
     }
