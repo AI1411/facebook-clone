@@ -38,21 +38,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function posts()
-    {
-        return $this->hasMany(Post::class);
-    }
-
-    public function friends()
-    {
-        return $this->belongsToMany(User::class, 'friends', 'friend_id', 'user_id');
-    }
-
-    public function likedPosts()
-    {
-        return $this->belongsToMany(Post::class, 'likes', 'user_id', 'post_id');
-    }
-
     public function images()
     {
         return $this->hasMany(UserImage::class);
@@ -64,7 +49,7 @@ class User extends Authenticatable
             ->orderByDesc('id')
             ->where('location', 'cover')
             ->withDefault(function ($userImage) {
-                $userImage->path = 'img/lauren-fleischmann-R2aodqJn3b8-unsplash.jpg';
+                $userImage->path = 'user-images/cover-default-image.png';
             });
     }
 
@@ -74,7 +59,22 @@ class User extends Authenticatable
             ->orderByDesc('id')
             ->where('location', 'profile')
             ->withDefault(function ($userImage) {
-                $userImage->path = 'img/978ac1e89199109775da54aae87299dc_600.jpg';
+                $userImage->path = 'user-images/profile-default-image.jpeg';
             });
+    }
+
+    public function likedPosts()
+    {
+        return $this->belongsToMany(Post::class, 'likes', 'user_id', 'post_id');
+    }
+
+    public function friends()
+    {
+        return $this->belongsToMany(User::class, 'friends', 'friend_id', 'user_id');
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
     }
 }

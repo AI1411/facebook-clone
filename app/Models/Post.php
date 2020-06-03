@@ -16,9 +16,9 @@ class Post extends Model
         static::addGlobalScope(new ReverseScope());
     }
 
-    public function user()
+    public function comments()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(Comment::class);
     }
 
     public function likes()
@@ -26,8 +26,8 @@ class Post extends Model
         return $this->belongsToMany(User::class, 'likes', 'post_id', 'user_id');
     }
 
-    public function comments()
+    public function user()
     {
-        return $this->hasMany(Comment::class);
+        return $this->belongsTo(User::class);
     }
 }

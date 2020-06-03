@@ -15,8 +15,9 @@ class PostController extends Controller
         $friends = Friend::friendships();
 
         if ($friends->isEmpty()) {
-            return PostResource::collection(request()->user()->posts);
+            return new PostCollection(request()->user()->posts);
         }
+
         return new PostCollection(
             Post::whereIn('user_id', [$friends->pluck('user_id'), $friends->pluck('friend_id')])
                 ->get()
@@ -44,7 +45,6 @@ class PostController extends Controller
             'body' => $data['body'],
             'image' => $image ?? null,
         ]);
-
 
         return new PostResource($post);
     }

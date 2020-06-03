@@ -10,6 +10,6 @@ class UserPostController extends Controller
 {
     public function index(User $user)
     {
-        return PostResource::collection($user->posts);
+        return new PostCollection($user->posts);
     }
 }

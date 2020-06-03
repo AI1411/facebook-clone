@@ -25,7 +25,7 @@ class FriendResource extends JsonResource
                 ]
             ],
             'links' => [
-                'self' => url('/users/' . $this->friend_id)
+                'self' => url('/users/'.$this->friend_id),
             ]
         ];
     }
