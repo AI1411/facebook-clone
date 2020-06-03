@@ -3,20 +3,21 @@
         <div class="flex flex-col p-4">
             <div class="flex items-center">
                 <div class="w-8">
-                    <img src="/img/978ac1e89199109775da54aae87299dc_600.jpg" alt=""
-                         class="w-8 h-8 object-cover rounded-full">
+                    <img :src="post.data.attributes.posted_by.data.attributes.profile_image.data.attributes.path"
+                         alt="profile image for user" class="w-8 h-8 object-cover rounded-full">
                 </div>
                 <div class="ml-6">
                     <div class="text-sm font-bold">{{ post.data.attributes.posted_by.data.attributes.name }}</div>
-                    <div class="text-sm text-gray-600">12 mins</div>
+                    <div class="text-sm text-gray-600">{{ post.data.attributes.posted_at }}</div>
                 </div>
             </div>
             <div class="mt-4">
                 <p>{{ post.data.attributes.body }}</p>
             </div>
         </div>
-        <div class="w-full" v-if="post.data.attributes.image">
-            <img :src="post.data.attributes.image" alt="" class="w-full">
+
+        <div class="w-full" v-if="post.data.attributes.image.length">
+            <img :src="post.data.attributes.image" alt="post image" class="w-full">
         </div>
 
         <div class="px-4 pt-2 flex justify-between text-gray-700 text-sm">
@@ -27,8 +28,9 @@
                 </svg>
                 <p>{{ post.data.attributes.likes.like_count }} likes</p>
             </div>
+
             <div>
-                <p>{{ post.data.attributes.comments.comment_count}} comments</p>
+                <p>{{ post.data.attributes.comments.comment_count }} comments</p>
             </div>
         </div>
 
@@ -44,27 +46,35 @@
             </button>
             <button class="flex justify-center py-2 rounded-lg text-sm text-gray-700 w-full  focus:outline-none"
                     @click="comments = ! comments">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-current w-5 h-5"><path d="M20.3 2H3.7C2 2 .6 3.4.6 5.2v10.1c0 1.7 1.4 3.1 3.1 3.1V23l6.6-4.6h9.9c1.7 0 3.1-1.4 3.1-3.1V5.2c.1-1.8-1.3-3.2-3-3.2zm1.8 13.3c0 1-.8 1.8-1.8 1.8H9.9L5 20.4V17H3.7c-1 0-1.8-.8-1.8-1.8v-10c0-1 .8-1.8 1.8-1.8h16.5c1 0 1.8.8 1.8 1.8v10.1zM6.7 6.7h10.6V8H6.7V6.7zm0 2.9h10.6v1.3H6.7V9.6zm0 2.8h10.6v1.3H6.7v-1.3z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-current w-5 h-5">
+                    <path
+                        d="M20.3 2H3.7C2 2 .6 3.4.6 5.2v10.1c0 1.7 1.4 3.1 3.1 3.1V23l6.6-4.6h9.9c1.7 0 3.1-1.4 3.1-3.1V5.2c.1-1.8-1.3-3.2-3-3.2zm1.8 13.3c0 1-.8 1.8-1.8 1.8H9.9L5 20.4V17H3.7c-1 0-1.8-.8-1.8-1.8v-10c0-1 .8-1.8 1.8-1.8h16.5c1 0 1.8.8 1.8 1.8v10.1zM6.7 6.7h10.6V8H6.7V6.7zm0 2.9h10.6v1.3H6.7V9.6zm0 2.8h10.6v1.3H6.7v-1.3z"/>
+                </svg>
                 <p class="ml-2">Comment</p>
             </button>
         </div>
+
         <div v-if="comments" class="border-t border-gray-400 p-4 pt-2">
             <div class="flex">
-                <input v-model="commentBody" type="text" name="comment" class="w-full pl-4 h-8 bg-gray-200 rounded-lg focus:outline-none">
+                <input v-model="commentBody" type="text" name="comment"
+                       class="w-full pl-4 h-8 bg-gray-200 rounded-lg focus:outline-none"
+                       placeholder="Write your comment">
                 <button v-if="commentBody"
                         class="bg-gray-200 ml-2 px-2 py-1 rounded-lg focus:outline-none"
-                        @click="$store.dispatch('commentPost', { body: commentBody, postId: post.data.post_id, postKey: $vnode.key })">
+                        @click="$store.dispatch('commentPost', { body: commentBody, postId: post.data.post_id, postKey: $vnode.key }); commentBody = ''">
                     Post
                 </button>
             </div>
 
             <div class="flex my-4 items-center" v-for="comment in post.data.attributes.comments.data">
                 <div class="w-8">
-                    <img src="https://cdn.pixabay.com/photo/2014/07/09/10/04/man-388104_960_720.jpg" alt="profile image for user" class="w-8 h-8 object-cover rounded-full">
+                    <img :src="comment.data.attributes.commented_by.data.attributes.profile_image.data.attributes.path"
+                         alt="profile image for user" class="w-8 h-8 object-cover rounded-full">
                 </div>
                 <div class="ml-4 flex-1">
                     <div class="bg-gray-200 rounded-lg p-2 text-sm">
-                        <a class="font-bold text-blue-700" :href="'/users/' + comment.data.attributes.commented_by.data.user_id">
+                        <a class="font-bold text-blue-700"
+                           :href="'/users/' + comment.data.attributes.commented_by.data.user_id">
                             {{ comment.data.attributes.commented_by.data.attributes.name }}
                         </a>
                         <p class="inline">
@@ -83,13 +93,15 @@
 <script>
     export default {
         name: "Post",
+
         props: [
-            'post'
+            'post',
         ],
+
         data: () => {
             return {
                 comments: false,
-                commentBody: ''
+                commentBody: '',
             }
         }
     }

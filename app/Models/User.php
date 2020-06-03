@@ -62,13 +62,19 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserImage::class)
             ->orderByDesc('id')
-            ->where('location', 'cover');
+            ->where('location', 'cover')
+            ->withDefault(function ($userImage) {
+                $userImage->path = 'img/lauren-fleischmann-R2aodqJn3b8-unsplash.jpg';
+            });
     }
 
     public function profileImage()
     {
         return $this->hasOne(UserImage::class)
             ->orderByDesc('id')
-            ->where('location', 'profile');
+            ->where('location', 'profile')
+            ->withDefault(function ($userImage) {
+                $userImage->path = 'img/978ac1e89199109775da54aae87299dc_600.jpg';
+            });
     }
 }
